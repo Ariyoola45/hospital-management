@@ -1,0 +1,69 @@
+rules_version = '2';
+
+// ============================================================================
+// Firestore Security Rules — CareCross Hospital Management System
+// ----------------------------------------------------------------------------
+// Roles are read from the users/{uid} document's `role` field ("admin" or
+// "receptionist"). Both roles can operate the day-to-day front-desk
+// workflow (patients, wards, admissions, payments, housekeeping); only
+// admins can manage ward inventory deletion, staff role assignment, and
+// sensitive billing/administrative actions.
+// ============================================================================
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function userRole() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && userRole() == 'admin';
+    }
+
+    function isStaff() {
+      return isSignedIn() && (userRole() == 'admin' || userRole() == 'receptionist');
+    }
+
+    // ---- users (staff profiles / role assignment) ----
+    match /users/{uid} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin();
+    }
+
+    // ---- patients ----
+    match /patients/{patientId} {
+      allow read, create, update: if isStaff();
+      allow delete: if isAdmin();
+    }
+
+    // ---- wards / beds ----
+    match /wards/{wardId} {
+      allow read: if isStaff();
+      allow update: if isStaff(); // status changes happen from both roles
+      allow create, delete: if isAdmin();
+    }
+
+    // ---- admissions ----
+    match /admissions/{admissionId} {
+      allow read, create, update: if isStaff();
+      allow delete: if isAdmin();
+    }
+
+    // ---- payments / billing ----
+    match /payments/{paymentId} {
+      allow read, create: if isStaff();
+      allow update, delete: if isAdmin();
+    }
+
+    // ---- housekeeping tasks ----
+    match /housekeepingTasks/{taskId} {
+      allow read, create, update: if isStaff();
+      allow delete: if isAdmin();
+    }
+  }
+}
