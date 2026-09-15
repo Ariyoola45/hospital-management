@@ -1,3 +1,5 @@
+
+import { useState } from "react";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import toast from "react-hot-toast";
@@ -27,6 +29,8 @@ const RECEPTIONIST_LINKS = [
 export default function DashboardLayout() {
   const { profile, role, logout } = useAuth();
   const navigate = useNavigate();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
   const links = role === "admin" ? ADMIN_LINKS : RECEPTIONIST_LINKS;
 
   const handleLogout = async () => {
@@ -35,15 +39,55 @@ export default function DashboardLayout() {
     navigate("/login");
   };
 
+  const closeSidebar = () => {
+    setSidebarOpen(false);
+  };
+
   return (
     <div className="dash-shell">
-      <aside className="dash-sidebar">
+      {/* Mobile header */}
+      <header className="mobile-header">
+        <button
+          className="mobile-menu-btn"
+          onClick={() => setSidebarOpen(true)}
+          aria-label="Open menu"
+        >
+          ☰
+        </button>
+
+        <div className="mobile-header__brand">
+          <span className="dash-sidebar__logo">CC</span>
+          <span>CareCross Hospital</span>
+        </div>
+      </header>
+
+      {/* Mobile overlay */}
+      <div
+        className={`sidebar-overlay ${sidebarOpen ? "is-visible" : ""}`}
+        onClick={closeSidebar}
+        aria-hidden="true"
+      />
+
+      {/* Sidebar */}
+      <aside className={`dash-sidebar ${sidebarOpen ? "is-open" : ""}`}>
         <div className="dash-sidebar__brand">
           <span className="dash-sidebar__logo">CC</span>
+
           <div>
             <p className="dash-sidebar__title">CareCross Hospital</p>
-            <p className="dash-sidebar__subtitle">{role === "admin" ? "Administrator" : "Receptionist"}</p>
+            <p className="dash-sidebar__subtitle">
+              {role === "admin" ? "Administrator" : "Receptionist"}
+            </p>
           </div>
+
+          {/* Mobile close button */}
+          <button
+            className="mobile-close-btn"
+            onClick={closeSidebar}
+            aria-label="Close menu"
+          >
+            ×
+          </button>
         </div>
 
         <nav className="dash-nav">
@@ -52,7 +96,10 @@ export default function DashboardLayout() {
               key={link.to}
               to={link.to}
               end={link.end}
-              className={({ isActive }) => "dash-nav__link" + (isActive ? " is-active" : "")}
+              onClick={closeSidebar}
+              className={({ isActive }) =>
+                "dash-nav__link" + (isActive ? " is-active" : "")
+              }
             >
               {link.label}
             </NavLink>
@@ -60,8 +107,14 @@ export default function DashboardLayout() {
         </nav>
 
         <div className="dash-sidebar__footer">
-          <p className="dash-sidebar__user">{profile?.fullName || "User"}</p>
-          <button className="btn btn--ghost btn--sm" onClick={handleLogout}>
+          <p className="dash-sidebar__user">
+            {profile?.fullName || "User"}
+          </p>
+
+          <button
+            className="btn btn--ghost btn--sm"
+            onClick={handleLogout}
+          >
             Log out
           </button>
         </div>
@@ -73,3 +126,4 @@ export default function DashboardLayout() {
     </div>
   );
 }
+

@@ -339,10 +339,382 @@ a { color: inherit; }
 .chart-card h3 { font-family: var(--font-display); font-size: 1.05rem; margin: 0 0 0.75rem; }
 
 /* ---------- Responsive ---------- */
-@media (max-width: 900px) {
+/* @media (max-width: 900px) {
   .dash-shell { grid-template-columns: 1fr; }
   .dash-sidebar { flex-direction: row; overflow-x: auto; align-items: center; }
   .dash-nav { flex-direction: row; }
   .dash-main { padding: 1.5rem; }
   .form-grid, .split-panels, .chart-grid { grid-template-columns: 1fr; }
+} */
+
+
+
+/* =========================================
+   MOBILE RESPONSIVE FIXES
+   ========================================= */
+
+/* Tablet and smaller screens */
+@media only screen and (max-width: 900px) {
+  .dash-sidebar {
+    flex-direction: row;
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .dash-sidebar a,
+  .dash-sidebar button {
+    flex-shrink: 0;
+  }
+
+  .page-header {
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .page-header button {
+    flex-shrink: 0;
+  }
+
+  .form-grid,
+  .split-panels,
+  .chart-grid {
+    grid-template-columns: 1fr;
+  }
 }
+
+
+/* Mobile phones */
+@media only screen and (max-width: 600px) {
+  body {
+    overflow-x: hidden;
+  }
+
+  .dashboard-main {
+    padding: 16px;
+    width: 100%;
+  }
+
+  .page-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .page-header h1 {
+    font-size: 24px;
+  }
+
+  .page-header button {
+    width: 100%;
+  }
+
+  /* Cards */
+  .stats-grid,
+  .card-grid,
+  .overview-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Forms */
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* Tables */
+  .table-wrap {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .table-wrap table {
+    min-width: 700px;
+  }
+
+  /* Charts */
+  .chart-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Modals */
+  .modal {
+    width: calc(100% - 24px);
+    max-width: none;
+    max-height: 90vh;
+    overflow-y: auto;
+    margin: 12px;
+  }
+
+  /* Buttons */
+  .btn {
+    min-height: 44px;
+  }
+}
+
+
+/* Very small phones */
+@media (max-width: 400px) {
+  .dashboard-main {
+    padding: 12px;
+  }
+
+  .page-header h1 {
+    font-size: 21px;
+  }
+
+  .card {
+    padding: 14px;
+  }
+
+  .modal {
+    width: calc(100% - 16px);
+    margin: 8px;
+  }
+}
+
+
+/* =========================================================
+   MOBILE SLIDE-IN SIDEBAR
+   ========================================================= */
+
+/* Hidden on desktop */
+.mobile-header {
+  display: none;
+}
+
+.mobile-close-btn {
+  display: none;
+}
+
+.sidebar-overlay {
+  display: none;
+}
+
+
+/* =========================================================
+   TABLET / MOBILE
+   ========================================================= */
+
+@media (max-width: 900px) {
+  .dash-shell {
+    display: block;
+    min-height: 100vh;
+  }
+
+  /* Mobile top bar */
+  .mobile-header {
+    position: sticky;
+    top: 0;
+    z-index: 900;
+    height: 64px;
+    padding: 0 1rem;
+    background: var(--surface);
+    border-bottom: 1px solid var(--line);
+
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .mobile-header__brand {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    font-family: var(--font-display);
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  .mobile-header__brand .dash-sidebar__logo {
+    width: 36px;
+    height: 36px;
+    font-size: 0.95rem;
+  }
+
+  /* Hamburger button */
+  .mobile-menu-btn {
+    width: 42px;
+    height: 42px;
+    border: 0;
+    border-radius: var(--radius-sm);
+    background: var(--ink);
+    color: #fff;
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .mobile-menu-btn:active {
+    transform: scale(0.96);
+  }
+
+
+  /* =======================================================
+     SIDEBAR
+     ======================================================= */
+
+  .dash-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    width: min(290px, 85vw);
+    height: 100vh;
+
+    z-index: 1000;
+
+    padding: 1.5rem 1.1rem;
+
+    display: flex;
+    flex-direction: column;
+
+    overflow-y: auto;
+
+    /* Hidden position */
+    transform: translateX(-100%);
+
+    /* Slide animation */
+    transition: transform 0.3s ease;
+
+    box-shadow: 8px 0 30px rgba(0, 0, 0, 0.18);
+  }
+
+  /* Open sidebar */
+  .dash-sidebar.is-open {
+    transform: translateX(0);
+  }
+
+  /* Sidebar brand */
+  .dash-sidebar__brand {
+    position: relative;
+    padding-right: 2.5rem;
+  }
+
+  /* Close button */
+  .mobile-close-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    width: 36px;
+    height: 36px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: var(--radius-sm);
+
+    background: transparent;
+    color: #fff;
+
+    font-size: 1.7rem;
+    line-height: 1;
+
+    cursor: pointer;
+  }
+
+  .mobile-close-btn:hover {
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+
+  /* Navigation returns to vertical */
+  .dash-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    flex: 1;
+  }
+
+  .dash-nav__link {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+
+  /* =======================================================
+     DARK OVERLAY
+     ======================================================= */
+
+  .sidebar-overlay {
+    position: fixed;
+    inset: 0;
+
+    z-index: 950;
+
+    background: rgba(0, 0, 0, 0.45);
+
+    opacity: 0;
+    visibility: hidden;
+
+    transition:
+      opacity 0.3s ease,
+      visibility 0.3s ease;
+
+    display: block;
+  }
+
+  .sidebar-overlay.is-visible {
+    opacity: 1;
+    visibility: visible;
+  }
+
+
+  /* Main content */
+  .dash-main {
+    width: 100%;
+    max-width: 1180px;
+    box-sizing: border-box;
+    padding: 1.5rem;
+  }
+}
+
+
+/* =========================================================
+   SMALL PHONES
+   ========================================================= */
+
+@media (max-width: 480px) {
+  .mobile-header {
+    height: 58px;
+    padding: 0 0.75rem;
+  }
+
+  .mobile-menu-btn {
+    width: 40px;
+    height: 40px;
+  }
+
+  .mobile-header__brand {
+    font-size: 0.95rem;
+  }
+
+  .mobile-header__brand .dash-sidebar__logo {
+    width: 34px;
+    height: 34px;
+  }
+
+  .dash-main {
+    padding: 1rem;
+  }
+
+  .dash-sidebar {
+    width: min(280px, 88vw);
+  }
+}
+

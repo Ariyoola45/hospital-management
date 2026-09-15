@@ -11,16 +11,24 @@ import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "YOUR_API_KEY",
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "your-project.firebaseapp.com",
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "your-project-id",
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "your-project.appspot.com",
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "000000000000",
-  appId: import.meta.env.VITE_FIREBASE_APP_ID || "1:000000000000:web:xxxxxxxxxxxxxxxx",
+  apiKey: "AIzaSyBqkQriyE5iYQxpojo0RBgjx5KhiUgha8g",
+  authDomain: "hopital-management-system.firebaseapp.com",
+  projectId: "hopital-management-system",
+  storageBucket: "hopital-management-system.firebasestorage.app",
+  messagingSenderId: "123694510271",
+  appId: "1:123694510271:web:033d5b54b1d1682b0bd60a",
+  measurementId: "G-C0B312J00L"
 };
 
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
+
 
 export const auth = getAuth(app);
 export const db = getFirestore(app);
