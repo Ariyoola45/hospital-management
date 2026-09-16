@@ -718,3 +718,51 @@ a { color: inherit; }
   }
 }
 
+
+/* =========================================
+   MOBILE DROPDOWN / OPTION FIX
+   ========================================= */
+
+
+@media (max-width: 600px) {
+  .form-grid {
+    width: 100%;
+    min-width: 0;
+    grid-template-columns: 1fr;
+  }
+
+  .form-group,
+  .form-field,
+  .input-group {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea,
+  .form-field input,
+  .form-field select,
+  .form-field textarea,
+  input,
+  select,
+  textarea {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  .card {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .modal {
+    width: calc(100vw - 24px);
+    max-width: calc(100vw - 24px);
+    box-sizing: border-box;
+  }
+}
